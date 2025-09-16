@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+
+  </head>
+  <body class="">
+    <div id="smooth-wrapper">
+      <div id="smooth-content">
+        <header class="header">
+          <h1 class="text-4xl"><%= htmlWebpackPlugin.options.title %></h1>
+          <nav class="nav">
+            <ul>
+              <li><a href="#about">About</a></li>
+              <li><a href="#projects">Projects</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+          </nav>
+          <div class="header__mode-toggle">
+            <label class="mode-toggle"><input name="color-scheme" type="checkbox" value=""> toggle dark mode </label>
+          </div>
+          <button class="menu-button">
+            Open menu
+          </button>
+        </header>
+        <main>
+          <div class="hero">
+            <svg viewbox="-700 -350 1400 700" width="1400" height="700">
+              <defs>
+                <g id="mountain">
+                  <polygon points="-10,0 10,0 0 -50" fill="red" />
+                </g>
+              </defs>
+              <use href="#mountain" x="-30" y="25" transform="scale(2)" />
+              <circle cx="50" cy="50" r="25" fill="red" />
+            </svg>
+          </div>
+          <div id="app"></div>
+          <section id="about">
+            <div class="rotating-header">
+              <h2 class="text-4xl">About me</h2>
+            </div>
+            <p>Hi! I'm George, a front end web developer</p>
+            <p>I've been making websites for over 20 years. I love solving problems and building accessible, reusable code.</p>
+            <p>I also love cooking, board games, football, and playing and listening to music. I've been in bands that have toured around the world. I hate slideshows.</p>
+          </section>
+          <section>
+            <div class="rotating-header">
+              <h2 class="text-4xl">Skills</h2>
+            </div>
+            <p>I've used lots of different frameworks and technologies, but here are some of my favorites.</p>
+            <ul>
+              <li>React</li>
+              <li>HTML</li>
+              <li>JavaScript</li>
+              <li>Next.js</li>
+              <li>CSS</li>
+              <li>SCSS</li>
+              <li>GSAP</li>
+              <li>Webpack</li>
+            </ul>
+          </section>
+          <section id="projects">
+            <div class="rotating-header">
+              <h2 class="text-4xl">Projects</h2>
+            </div>
+            <p>Here's some work I've done that I like</p>
+            <p>SES Minisite</p>
+            <p>Fresh website</p>
+          </section>
+          <section id="contact">
+            <div class="rotating-header">
+              <h2 class="text-4xl">Contact</h2>
+            </div>
+            <p>Email me here</p>
+            <p>Here's my linked in</p>
+            <p>Here's my github</p>
+          </section>
+          <section>
+            <div class="rotating-header">
+              <h2 class="text-4xl">Experience</h2>
+            </div>
+            <p>2019 - Present: Gain</p>
+            <p>2017 - 2019: Freelance</p>
+            <p>2014 - 2017: Nation</p>
+          </section>
+        </main>
+        <footer>
+          &copy; George Phillips
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>
