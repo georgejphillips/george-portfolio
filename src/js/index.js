@@ -3,15 +3,31 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
+import { CustomBounce } from "gsap/CustomBounce";
+import { CustomEase } from "gsap/CustomEase";
 
-gsap.registerPlugin(ScrollTrigger, SplitText, ScrollSmoother);
+gsap.registerPlugin(
+  ScrollTrigger,
+  SplitText,
+  ScrollSmoother,
+  CustomBounce,
+  CustomEase
+);
 
+// scroll smoother
 const smoother = ScrollSmoother.create({
   smooth: 1,
   effects: true,
   smoothTouch: 0.1,
 });
 
+CustomBounce.create("myBounce", {
+  strength: 0.6,
+  squash: 1.5,
+  squashID: "myBounce-squash",
+});
+
+// nav
 const nav = document.querySelector("nav");
 
 nav.querySelectorAll("a").forEach((link) => {
@@ -22,11 +38,22 @@ nav.querySelectorAll("a").forEach((link) => {
   });
 });
 
+// rotating headers
 const rotatingHeaders = document.querySelectorAll(".rotating-header");
 
+const bouncingHeaders = document.querySelectorAll(".bouncing-header");
+
+const revealHeaders = document.querySelectorAll(".reveal-header");
+
+const parallaxHeaders = document.querySelectorAll(".parallax-header");
+
+const staggerHeaders = document.querySelectorAll(".stagger-header");
+
+const hero = document.querySelector(".hero");
+
 const initHeaders = () => {
+  // rotating headers
   rotatingHeaders.forEach((header) => {
-    header.querySelector("h2");
     const original = header.querySelector("h2");
     const clone = original.cloneNode(true);
     header.appendChild(clone);
@@ -40,14 +67,273 @@ const initHeaders = () => {
 
     ScrollTrigger.create({
       trigger: header,
-      start: "top 80%",
-      end: "bottom top",
-      // scrub: true,
-      toggleActions: "play none none reverse",
-      markers: true,
       animation: createHeaderAnimation(header),
-      invalidateOnRefresh: true,
+      toggleActions: "play none none reset",
     });
+  });
+
+  // boucing headers
+  bouncingHeaders.forEach((header) => {
+    header.heading = header.querySelector("h2");
+
+    const splitText = new SplitText(header.heading, {
+      type: "chars",
+    });
+
+    const tl = gsap
+      .timeline({
+        defaults: {
+          duration: 1.5,
+          stagger: {
+            amount: 0.1,
+            ease: "sine.in",
+          },
+        },
+      })
+      .from(
+        splitText.chars,
+        {
+          duration: 0.6,
+          opacity: 0,
+          ease: "power1.inOut",
+        },
+        0
+      )
+      .from(
+        splitText.chars,
+        {
+          y: -350,
+          ease: "myBounce",
+        },
+        0
+      )
+      .to(
+        splitText.chars,
+        {
+          scaleX: 1.8,
+          scaleY: 0.7,
+          rotate: (i) => {
+            15 - 30 * Math.random();
+          },
+          ease: "myBounce-squash",
+          transformOrigin: "50% 100%",
+        },
+        0
+      );
+    //   .timeline({
+    //     defaults: {
+    //       duration: 1.5,
+    //       stagger: {
+    //         amount: 0.1,
+    //         ease: "sine.in",
+    //       },
+    //     },
+    //   })
+    //   .from(
+    //     splitText.chars,
+    //     {
+    //       duration: 0.6,
+    //       opacity: 0,
+    //       ease: "power1.inOut",
+    //     },
+    //     0
+    //   )
+    //   .from(
+    //     splitText.chars,
+    //     {
+    //       y: -350,
+    //       ease: "myBounce",
+    //     },
+    //     0
+    //   )
+    //   .to(
+    //     splitText.chars,
+    //     {
+    //       scaleX: 1.8,
+    //       scaleY: 0.7,
+    //       rotate: (i) => {
+    //         15 - 30 * Math.random();
+    //       },
+    //       ease: "myBounce-squash",
+    //       transformOrigin: "50% 100%",
+    //     },
+    //     0
+    //   );
+
+    ScrollTrigger.create({
+      trigger: header,
+      toggleActions: "play none none reset",
+      animation: tl,
+    });
+  });
+
+  // reveal headers
+  revealHeaders.forEach((header) => {
+    header.heading = header.querySelector("h2");
+
+    let split = SplitText.create(header, {
+      type: "chars, words",
+      mask: "chars",
+    });
+
+    let tween = gsap.from(split.chars, {
+      duration: 0.6,
+      yPercent: "random([-150, 150])",
+      xPercent: "random([-150, 150])",
+      stagger: {
+        from: "random",
+        amount: 0.6,
+      },
+      ease: "power3.out",
+    });
+
+    ScrollTrigger.create({
+      trigger: header,
+      toggleActions: "play none none reset",
+      animation: tween,
+    });
+  });
+
+  staggerHeaders.forEach((header) => {
+    header.heading = header.querySelector("h2");
+
+    gsap.set(header.heading, { opacity: 1 });
+
+    const split = SplitText.create(header.heading, {
+      type: "chars",
+    });
+
+    let tween = gsap.from(split.chars, {
+      scale: 0.2,
+      opacity: 0,
+      stagger: {
+        each: 0.2,
+        from: "center",
+      },
+    });
+
+    ScrollTrigger.create({
+      trigger: header,
+      toggleActions: "play none none reset",
+      animation: tween,
+    });
+  });
+
+  parallaxHeaders.forEach((header) => {
+    const parent = header.parentNode;
+    header.heading = header.querySelector("h2");
+    let splitText = SplitText.create(header.heading, {
+      type: "chars",
+      charsClass: "string",
+    });
+
+    const chars = splitText.chars;
+    let tween = gsap.from(chars, {
+      duration: 0.6,
+      yPercent: -250,
+      ease: "none",
+      stagger: {
+        from: "random",
+        amount: 0.6,
+        onStart: function () {
+          // console.log("start");
+          if (this.targets()[0].classList.contains("string--landed")) {
+            this.targets()[0].classList.remove("string--landed");
+          }
+        },
+        onComplete: function () {
+          this.targets()[0].classList.add("string--landed");
+        },
+      },
+    });
+
+    ScrollTrigger.create({
+      trigger: parent,
+      start: "top 80%",
+      end: "bottom bottom",
+      scrub: 1,
+      animation: tween,
+      onEnterBack: () => {
+        splitText.chars.forEach((char) => {
+          char.classList.remove("string--landed");
+        });
+      },
+    });
+  });
+};
+
+const initHero = () => {
+  const mask = hero.querySelector(".mask");
+  const noMask = hero.querySelector(".no-mask");
+  mask.header = mask.querySelector("h2");
+  noMask.header = noMask.querySelector("h2");
+
+  const maskSplit = SplitText.create(mask.header, {
+    type: "chars",
+    charsClass: "char",
+  });
+
+  const noMaskSplit = SplitText.create(noMask.header, {
+    type: "chars",
+    charsClass: "char",
+  });
+  const tl = gsap.timeline().to(
+    mask,
+    {
+      duration: 1,
+      clipPath: "circle(60%)",
+      ease: "none",
+    },
+    0
+  );
+
+  ScrollTrigger.create({
+    trigger: hero,
+    animation: tl,
+    pin: true,
+    scrub: true,
+  });
+};
+
+const initText = () => {
+  const text = document.querySelectorAll(".text");
+
+  text.forEach((text) => {
+    const paragraph = text.querySelectorAll("p");
+    let tween = gsap.from(paragraph, {
+      duration: 1,
+      opacity: 0.4,
+      yPercent: 100,
+      ease: "expo",
+    });
+
+    ScrollTrigger.create({
+      trigger: text,
+      toggleActions: "play none none reset",
+      markers: true,
+      animation: tween,
+    });
+  });
+};
+
+const initSkills = () => {
+  const skills = document.querySelector(".skills");
+  const skillsList = document.querySelectorAll(".skills li");
+  let tween = gsap.from(skillsList, {
+    duration: 1,
+    opacity: 0,
+    scale: 0.7,
+    yPercent: 100,
+    ease: "expo",
+    stagger: {
+      each: 0.1,
+    },
+  });
+  ScrollTrigger.create({
+    trigger: skills,
+    toggleActions: "play none none reset",
+    start: "top 80%",
+    animation: tween,
   });
 };
 
@@ -107,39 +393,10 @@ const createHeaderAnimation = (header) => {
   return tl;
 };
 
-const checkbox = document.querySelector('input[name="color-scheme"]');
-
-const systemDarkModeOn = window.matchMedia(
-  "(prefers-color-scheme: dark)"
-).matches;
-const localDarkMode = localStorage.getItem("darkMode");
-
-const toggleMode = () => {
-  document.body.classList.toggle("night");
-  document.body.classList.toggle("day");
-};
-
-if (localDarkMode === "true") {
-  checkbox.checked = true;
-  document.body.classList.add("night");
-  document.body.classList.remove("day");
-} else if (localDarkMode === "false") {
-  document.body.classList.add("day");
-  document.body.classList.remove("night");
-} else if (systemDarkModeOn) {
-  checkbox.checked = true;
-  document.body.classList.add("night");
-  document.body.classList.remove("day");
-}
-
-checkbox.addEventListener("change", (e) => {
-  toggleMode();
-  localStorage.setItem("darkMode", checkbox.checked ? true : false);
-});
-
 // wait for font to load before calling function
 document.fonts.ready.then(() => {
+  initHero();
   initHeaders();
-
-  createHeaderAnimation();
+  initText();
+  initSkills();
 });
