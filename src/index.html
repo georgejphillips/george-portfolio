@@ -13,27 +13,29 @@
         <header class="header">
           <h1><%= htmlWebpackPlugin.options.title %></h1>
           <nav class="nav">
+            <button class="close-button" aria-label="Close menu"><span></span><span></span></button>
             <ul>
               <li><a href="#about">About</a></li>
               <li><a href="#projects">Projects</a></li>
               <li><a href="#contact">Contact</a></li>
             </ul>
           </nav>
-          <button class="menu-button">
-            Open menu
+          <button class="menu-button" aria-label="Open menu">
+            <span></span>
+            <span></span>
+            <span></span>
           </button>
         </header>
         <main>
           <section class="hero">
             <div class="no-mask">
               <h2>George Phillips</h2>
-              <p>Front End Web Developer</p>
+              <p>Front End <span>Web Developer</span></p>
             </div>
             <div class="mask" aria-hidden="true">
               <h2>George Phillips</h2>
-              <p>Front End Web Developer</p>
+              <p>Front End <span>Web Developer</span></p>
             </div>
-
           </section>
           <section class="about" id="about">
             <div class="rotating-header">
@@ -63,7 +65,6 @@
                 <li>Flutter</li>
                 <li>Figma</li>
                 <li>VS Code</li>
-                <li>
               </ul>
             </div>
           </section>
@@ -76,7 +77,6 @@
               <ul>
                 <li><a href="https://ses.com/ready-to-soar">SES Minisite</a></li>
                 <li><a href="https://freshpunks.com">Fresh website</a></li>
-                <li><a href="https://georgephillipsmusic.co.uk"></a></li>
               </ul>
             </div>
           </section>

@@ -38,6 +38,25 @@ nav.querySelectorAll("a").forEach((link) => {
   });
 });
 
+// menu button
+const menuButton = document.querySelector(".menu-button");
+
+menuButton.addEventListener("click", () => {
+  smoother.paused(true);
+  nav.classList.toggle("active");
+  menuButton.classList.toggle("active");
+  document.body.classList.toggle("menu-open");
+});
+
+const closeButton = document.querySelector(".close-button");
+
+closeButton.addEventListener("click", () => {
+  smoother.paused(false);
+  nav.classList.toggle("active");
+  menuButton.classList.toggle("active");
+  document.body.classList.toggle("menu-open");
+});
+
 // rotating headers
 const rotatingHeaders = document.querySelectorAll(".rotating-header");
 
@@ -120,45 +139,6 @@ const initHeaders = () => {
         },
         0
       );
-    //   .timeline({
-    //     defaults: {
-    //       duration: 1.5,
-    //       stagger: {
-    //         amount: 0.1,
-    //         ease: "sine.in",
-    //       },
-    //     },
-    //   })
-    //   .from(
-    //     splitText.chars,
-    //     {
-    //       duration: 0.6,
-    //       opacity: 0,
-    //       ease: "power1.inOut",
-    //     },
-    //     0
-    //   )
-    //   .from(
-    //     splitText.chars,
-    //     {
-    //       y: -350,
-    //       ease: "myBounce",
-    //     },
-    //     0
-    //   )
-    //   .to(
-    //     splitText.chars,
-    //     {
-    //       scaleX: 1.8,
-    //       scaleY: 0.7,
-    //       rotate: (i) => {
-    //         15 - 30 * Math.random();
-    //       },
-    //       ease: "myBounce-squash",
-    //       transformOrigin: "50% 100%",
-    //     },
-    //     0
-    //   );
 
     ScrollTrigger.create({
       trigger: header,
@@ -171,12 +151,12 @@ const initHeaders = () => {
   revealHeaders.forEach((header) => {
     header.heading = header.querySelector("h2");
 
-    let split = SplitText.create(header, {
+    const split = SplitText.create(header, {
       type: "chars, words",
       mask: "chars",
     });
 
-    let tween = gsap.from(split.chars, {
+    const tween = gsap.from(split.chars, {
       duration: 0.6,
       yPercent: "random([-150, 150])",
       xPercent: "random([-150, 150])",
@@ -203,7 +183,7 @@ const initHeaders = () => {
       type: "chars",
     });
 
-    let tween = gsap.from(split.chars, {
+    const tween = gsap.from(split.chars, {
       scale: 0.2,
       opacity: 0,
       stagger: {
@@ -222,13 +202,14 @@ const initHeaders = () => {
   parallaxHeaders.forEach((header) => {
     const parent = header.parentNode;
     header.heading = header.querySelector("h2");
-    let splitText = SplitText.create(header.heading, {
+
+    const splitText = SplitText.create(header.heading, {
       type: "chars",
       charsClass: "string",
     });
 
     const chars = splitText.chars;
-    let tween = gsap.from(chars, {
+    const tween = gsap.from(chars, {
       duration: 0.6,
       yPercent: -250,
       ease: "none",
@@ -236,7 +217,6 @@ const initHeaders = () => {
         from: "random",
         amount: 0.6,
         onStart: function () {
-          // console.log("start");
           if (this.targets()[0].classList.contains("string--landed")) {
             this.targets()[0].classList.remove("string--landed");
           }
@@ -264,19 +244,7 @@ const initHeaders = () => {
 
 const initHero = () => {
   const mask = hero.querySelector(".mask");
-  const noMask = hero.querySelector(".no-mask");
-  mask.header = mask.querySelector("h2");
-  noMask.header = noMask.querySelector("h2");
 
-  const maskSplit = SplitText.create(mask.header, {
-    type: "chars",
-    charsClass: "char",
-  });
-
-  const noMaskSplit = SplitText.create(noMask.header, {
-    type: "chars",
-    charsClass: "char",
-  });
   const tl = gsap.timeline().to(
     mask,
     {
@@ -298,19 +266,22 @@ const initHero = () => {
 const initText = () => {
   const text = document.querySelectorAll(".text");
 
-  text.forEach((text) => {
-    const paragraph = text.querySelectorAll("p");
-    let tween = gsap.from(paragraph, {
+  text.forEach((t) => {
+    const p = t.querySelectorAll("p");
+
+    const tween = gsap.from(p, {
       duration: 1,
-      opacity: 0.4,
+      opacity: 0,
       yPercent: 100,
       ease: "expo",
+      stagger: {
+        each: 0.4,
+      },
     });
 
     ScrollTrigger.create({
-      trigger: text,
+      trigger: t,
       toggleActions: "play none none reset",
-      markers: true,
       animation: tween,
     });
   });
@@ -319,7 +290,8 @@ const initText = () => {
 const initSkills = () => {
   const skills = document.querySelector(".skills");
   const skillsList = document.querySelectorAll(".skills li");
-  let tween = gsap.from(skillsList, {
+
+  const tween = gsap.from(skillsList, {
     duration: 1,
     opacity: 0,
     scale: 0.7,
@@ -329,6 +301,7 @@ const initSkills = () => {
       each: 0.1,
     },
   });
+
   ScrollTrigger.create({
     trigger: skills,
     toggleActions: "play none none reset",
