@@ -27,35 +27,47 @@ CustomBounce.create("myBounce", {
   squashID: "myBounce-squash",
 });
 
-// nav
-const nav = document.querySelector("nav");
+const mm = window.matchMedia("(max-width: 720px)");
 
-nav.querySelectorAll("a").forEach((link) => {
-  link.addEventListener("click", (e) => {
-    e.preventDefault();
-    const target = e.target.getAttribute("href");
-    smoother.scrollTo(target, true, "top top");
+const initNav = () => {
+  const header = document.querySelector("header");
+
+  gsap.timeline().from(header, {
+    yPercent: -100,
+    duration: 1,
+    ease: "myBounce",
   });
-});
 
-// menu button
-const menuButton = document.querySelector(".menu-button");
+  // nav
+  const nav = document.querySelector("nav");
 
-menuButton.addEventListener("click", () => {
-  smoother.paused(true);
-  nav.classList.toggle("active");
-  menuButton.classList.toggle("active");
-  document.body.classList.toggle("menu-open");
-});
+  nav.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      const target = e.target.getAttribute("href");
+      nav.classList.remove("active");
+      smoother.paused(false);
+      smoother.scrollTo(target, true, "top top");
+    });
+  });
 
-const closeButton = document.querySelector(".close-button");
+  // menu button
+  const menuButton = document.querySelector(".menu-button");
 
-closeButton.addEventListener("click", () => {
-  smoother.paused(false);
-  nav.classList.toggle("active");
-  menuButton.classList.toggle("active");
-  document.body.classList.toggle("menu-open");
-});
+  menuButton.addEventListener("click", () => {
+    smoother.paused(true);
+    nav.classList.toggle("active");
+    document.body.classList.toggle("menu-open");
+  });
+
+  const closeButton = document.querySelector(".close-button");
+
+  closeButton.addEventListener("click", () => {
+    smoother.paused(false);
+    nav.classList.toggle("active");
+    document.body.classList.toggle("menu-open");
+  });
+};
 
 // rotating headers
 const rotatingHeaders = document.querySelectorAll(".rotating-header");
@@ -243,6 +255,29 @@ const initHeaders = () => {
 };
 
 const initHero = () => {
+  const noMask = hero.querySelector(".no-mask");
+
+  gsap
+    .timeline()
+    .from(
+      noMask,
+      {
+        duration: 1,
+        opacity: 0,
+        ease: "none",
+      },
+      0
+    )
+    .from(
+      noMask,
+      {
+        duration: 0.3,
+        yPercent: 50,
+        scale: 0.2,
+      },
+      0
+    );
+
   const mask = hero.querySelector(".mask");
 
   const tl = gsap.timeline().to(
@@ -260,6 +295,7 @@ const initHero = () => {
     animation: tl,
     pin: true,
     scrub: true,
+    invalidateOnRefresh: true,
   });
 };
 
@@ -269,21 +305,23 @@ const initText = () => {
   text.forEach((t) => {
     const p = t.querySelectorAll("p");
 
-    const tween = gsap.from(p, {
-      duration: 1,
-      opacity: 0,
-      yPercent: 100,
-      ease: "expo",
-      stagger: {
-        each: 0.4,
-      },
-    });
+    if (p.length) {
+      const tween = gsap.from(p, {
+        duration: 1,
+        opacity: 0,
+        yPercent: 100,
+        ease: "expo",
+        stagger: {
+          each: 0.4,
+        },
+      });
 
-    ScrollTrigger.create({
-      trigger: t,
-      toggleActions: "play none none reset",
-      animation: tween,
-    });
+      ScrollTrigger.create({
+        trigger: t,
+        toggleActions: "play none none reset",
+        animation: tween,
+      });
+    }
   });
 };
 
@@ -368,6 +406,7 @@ const createHeaderAnimation = (header) => {
 
 // wait for font to load before calling function
 document.fonts.ready.then(() => {
+  initNav();
   initHero();
   initHeaders();
   initText();
