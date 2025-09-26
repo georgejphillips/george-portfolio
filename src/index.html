@@ -7,6 +7,15 @@
     <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
   <body class="">
+    <noscript>
+      <style>
+        body {
+          .no-mask {
+            visibility: visible;
+          }
+        }
+      </style>
+    </noscript>
     <div id="smooth-wrapper">
       <div id="smooth-content">
         <header class="header">
@@ -15,8 +24,10 @@
             <button class="close-button" aria-label="Close menu"><span></span><span></span></button>
             <ul>
               <li><a href="#about">About</a></li>
+              <li><a href="#skills">Skills</a></li>
               <li><a href="#projects">Projects</a></li>
               <li><a href="#contact">Contact</a></li>
+              <li><a href="#experience">Experience</a></li>
             </ul>
           </nav>
           <button class="menu-button" aria-label="Open menu">
@@ -47,7 +58,7 @@
               <p>I've been in bands that have toured around the world.</p>
             </div>
           </section>
-          <section class="skills">
+          <section class="skills" id="skills">
             <div class="bouncing-header">
               <h2>Skills</h2>
             </div>
@@ -90,7 +101,7 @@
               <p>Here's my <a href="https://github.com/georgejphillips">Github</a></p>
             </div>
           </section>
-          <section class="experience">
+          <section class="experience" id="experience">
             <div class="parallax-header">
               <h2>Experience</h2>
             </div>

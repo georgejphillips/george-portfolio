@@ -29,6 +29,8 @@ CustomBounce.create("myBounce", {
 
 const mm = window.matchMedia("(max-width: 720px)");
 
+let isMobile = false;
+
 const initNav = () => {
   const header = document.querySelector("header");
 
@@ -262,6 +264,7 @@ const initHero = () => {
     .from(
       noMask,
       {
+        autoAlpha: 0,
         duration: 1,
         opacity: 0,
         ease: "none",
@@ -404,8 +407,42 @@ const createHeaderAnimation = (header) => {
   return tl;
 };
 
+const toggleAnimations = (isMobile) => {
+  if (isMobile) {
+    document.body.classList.add("animate");
+  } else {
+    document.body.classList.remove("animate");
+  }
+};
+
+const checkMobile = () => {
+  if (mm.matches) {
+    isMobile = true;
+    toggleAnimations(isMobile);
+  } else {
+    isMobile = false;
+    toggleAnimations(isMobile);
+  }
+};
+
+const debounce = (func) => {
+  let timer;
+  return (event) => {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(func, 100, event);
+  };
+};
+
+window.addEventListener(
+  "resize",
+  debounce((e) => {
+    checkMobile();
+  })
+);
+
 // wait for font to load before calling function
 document.fonts.ready.then(() => {
+  checkMobile();
   initNav();
   initHero();
   initHeaders();
