@@ -28,6 +28,7 @@ CustomBounce.create("myBounce", {
 });
 
 const mm = window.matchMedia("(max-width: 720px)");
+const gsapMm = gsap.matchMedia();
 
 let isMobile = false;
 
@@ -43,6 +44,42 @@ const initNav = () => {
   // nav
   const nav = document.querySelector("nav");
 
+  const navItems = nav.querySelectorAll("li");
+
+  const resetNav = () => {
+    gsap.set(navItems, {
+      opacity: 0.4,
+      scale: 0.4,
+    });
+  };
+
+  let tl;
+
+  gsapMm.add("(max-width: 720px)", () => {
+    tl = gsap
+      .timeline()
+      .pause()
+      .to(
+        navItems,
+        {
+          opacity: 1,
+          scale: 1,
+          stagger: 0.2,
+          delay: 1,
+        },
+        0
+      )
+      .from(
+        navItems,
+        {
+          x: "90vw",
+          delay: 0.4,
+          stagger: 0.2,
+        },
+        0
+      );
+  });
+
   nav.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", (e) => {
       e.preventDefault();
@@ -56,19 +93,30 @@ const initNav = () => {
   // menu button
   const menuButton = document.querySelector(".menu-button");
 
+  let menuOpen = false;
+
   menuButton.addEventListener("click", () => {
-    smoother.paused(true);
-    nav.classList.toggle("active");
-    document.body.classList.toggle("menu-open");
+    if (isMobile) {
+      menuOpen = !menuOpen;
+      smoother.paused(menuOpen);
+      menuButton.classList.toggle("active");
+      nav.classList.toggle("active");
+      document.body.classList.toggle("menu-open");
+      if (menuOpen) {
+        tl.resume();
+      } else {
+        setTimeout(() => {
+          resetNav();
+          tl.restart();
+          tl.pause();
+        }, 400);
+      }
+    }
   });
 
-  const closeButton = document.querySelector(".close-button");
-
-  closeButton.addEventListener("click", () => {
-    smoother.paused(false);
-    nav.classList.toggle("active");
-    document.body.classList.toggle("menu-open");
-  });
+  if (isMobile) {
+    resetNav();
+  }
 };
 
 // rotating headers
@@ -257,48 +305,21 @@ const initHeaders = () => {
 };
 
 const initHero = () => {
-  const noMask = hero.querySelector(".no-mask");
-
-  gsap
-    .timeline()
-    .from(
-      noMask,
-      {
-        autoAlpha: 0,
-        duration: 1,
-        opacity: 0,
-        ease: "none",
-      },
-      0
-    )
-    .from(
-      noMask,
-      {
-        duration: 0.3,
-        yPercent: 50,
-        scale: 0.2,
-      },
-      0
-    );
-
   const mask = hero.querySelector(".mask");
 
-  const tl = gsap.timeline().to(
-    mask,
-    {
-      duration: 1,
-      clipPath: "circle(60%)",
-      ease: "none",
-    },
-    0
-  );
+  mask.header = mask.querySelector("svg");
 
-  ScrollTrigger.create({
-    trigger: hero,
-    animation: tl,
-    pin: true,
-    scrub: true,
-    invalidateOnRefresh: true,
+  gsap.to(mask.header, {
+    scale: 100,
+    scrollTrigger: {
+      trigger: ".hero",
+      scrub: 1,
+      pin: true,
+      start: "top top",
+      end: "+=600",
+      invalidateOnRefresh: true,
+    },
+    ease: "none",
   });
 };
 

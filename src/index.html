@@ -16,35 +16,39 @@
         }
       </style>
     </noscript>
+    <header class="header">
+      <h1><%= htmlWebpackPlugin.options.title %></h1>
+      <nav class="nav">
+        <button class="close-button" aria-label="Close menu"><span></span><span></span></button>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="#experience">Experience</a></li>
+        </ul>
+      </nav>
+      <button class="menu-button" aria-label="Open menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </header>
     <div id="smooth-wrapper">
       <div id="smooth-content">
-        <header class="header">
-          <h1><%= htmlWebpackPlugin.options.title %></h1>
-          <nav class="nav">
-            <button class="close-button" aria-label="Close menu"><span></span><span></span></button>
-            <ul>
-              <li><a href="#about">About</a></li>
-              <li><a href="#skills">Skills</a></li>
-              <li><a href="#projects">Projects</a></li>
-              <li><a href="#contact">Contact</a></li>
-              <li><a href="#experience">Experience</a></li>
-            </ul>
-          </nav>
-          <button class="menu-button" aria-label="Open menu">
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
-        </header>
         <main>
           <section class="hero">
-            <div class="no-mask">
-              <h2>George Phillips</h2>
-              <p>Front End <span>Web Developer</span></p>
-            </div>
-            <div class="mask" aria-hidden="true">
-              <h2>George Phillips</h2>
-              <p>Front End <span>Web Developer</span></p>
+            <div class="mask">
+              <p>Front End Web Developer</p>
+              <svg width="100%" height="100%" viewBox="0 0 8000 500" preserveAspectRatio="xMidYMid slice">
+                <defs>
+                  <mask id="mask" x="0" y="0" width="100%" height="100%">
+                    <rect x="0" y="0" width="100%" height="100%" />
+                    <text x="50%" y="50%" overflow="visible">George Phillips</text>
+                  </mask>
+                </defs>
+                <rect x="0" y="0" width="100%" height="100%" />
+              </svg>
             </div>
           </section>
           <section class="about" id="about">
